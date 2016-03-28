@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-
+#import "ZZZKeyboard.h"
 @interface ViewController ()
 
 @end
@@ -17,6 +17,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+
+
+    ZZZKeyboard *key = [[ZZZKeyboard alloc]initWithFrame:CGRectMake(0, 0, 375, 240)];
+
+    UITextField *textField = [[UITextField alloc]initWithFrame:CGRectMake(30, 30, 300, 300)];
+    textField.placeholder = @"请输入xxxxx";
+    textField.inputView = key;
+
+    [self.view addSubview:textField];
+
 }
 
 - (void)didReceiveMemoryWarning {

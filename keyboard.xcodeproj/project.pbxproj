@@ -15,6 +15,11 @@
 		3A5E4CDB1CA8D11000AE4DC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4CD91CA8D11000AE4DC6 /* LaunchScreen.storyboard */; };
 		3A5E4CE61CA8D11000AE4DC6 /* keyboardTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A5E4CE51CA8D11000AE4DC6 /* keyboardTests.m */; };
 		3A5E4CF11CA8D11000AE4DC6 /* keyboardUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A5E4CF01CA8D11000AE4DC6 /* keyboardUITests.m */; };
+		3A5E4D001CA8D17F00AE4DC6 /* ZZZKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A5E4CFF1CA8D17F00AE4DC6 /* ZZZKeyboard.m */; };
+		3A5E4D051CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4D011CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small.png */; };
+		3A5E4D061CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4D021CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png */; };
+		3A5E4D071CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4D031CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png */; };
+		3A5E4D081CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4D041CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +56,12 @@
 		3A5E4CEC1CA8D11000AE4DC6 /* keyboardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = keyboardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A5E4CF01CA8D11000AE4DC6 /* keyboardUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = keyboardUITests.m; sourceTree = "<group>"; };
 		3A5E4CF21CA8D11000AE4DC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3A5E4CFE1CA8D17F00AE4DC6 /* ZZZKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZZZKeyboard.h; sourceTree = "<group>"; };
+		3A5E4CFF1CA8D17F00AE4DC6 /* ZZZKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZZZKeyboard.m; sourceTree = "<group>"; };
+		3A5E4D011CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_keyboard_backspace_small.png; sourceTree = "<group>"; };
+		3A5E4D021CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_keyboard_backspace_small@2x.png"; sourceTree = "<group>"; };
+		3A5E4D031CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_keyboard_folded_small.png; sourceTree = "<group>"; };
+		3A5E4D041CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_keyboard_folded_small@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,10 +112,16 @@
 		3A5E4CCA1CA8D11000AE4DC6 /* keyboard */ = {
 			isa = PBXGroup;
 			children = (
+				3A5E4D011CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small.png */,
+				3A5E4D021CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png */,
+				3A5E4D031CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png */,
+				3A5E4D041CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png */,
 				3A5E4CCE1CA8D11000AE4DC6 /* AppDelegate.h */,
 				3A5E4CCF1CA8D11000AE4DC6 /* AppDelegate.m */,
 				3A5E4CD11CA8D11000AE4DC6 /* ViewController.h */,
 				3A5E4CD21CA8D11000AE4DC6 /* ViewController.m */,
+				3A5E4CFE1CA8D17F00AE4DC6 /* ZZZKeyboard.h */,
+				3A5E4CFF1CA8D17F00AE4DC6 /* ZZZKeyboard.m */,
 				3A5E4CD41CA8D11000AE4DC6 /* Main.storyboard */,
 				3A5E4CD71CA8D11000AE4DC6 /* Assets.xcassets */,
 				3A5E4CD91CA8D11000AE4DC6 /* LaunchScreen.storyboard */,
@@ -243,8 +260,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A5E4D061CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png in Resources */,
 				3A5E4CDB1CA8D11000AE4DC6 /* LaunchScreen.storyboard in Resources */,
+				3A5E4D071CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png in Resources */,
 				3A5E4CD81CA8D11000AE4DC6 /* Assets.xcassets in Resources */,
+				3A5E4D051CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small.png in Resources */,
+				3A5E4D081CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png in Resources */,
 				3A5E4CD61CA8D11000AE4DC6 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -273,6 +294,7 @@
 				3A5E4CD31CA8D11000AE4DC6 /* ViewController.m in Sources */,
 				3A5E4CD01CA8D11000AE4DC6 /* AppDelegate.m in Sources */,
 				3A5E4CCD1CA8D11000AE4DC6 /* main.m in Sources */,
+				3A5E4D001CA8D17F00AE4DC6 /* ZZZKeyboard.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
