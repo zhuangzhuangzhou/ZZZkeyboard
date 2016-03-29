@@ -43,7 +43,6 @@ typedef NS_ENUM(NSInteger,ZZZKeyboardButtonStyle){
 }
 
 
-
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
@@ -81,6 +80,8 @@ typedef NS_ENUM(NSInteger,ZZZKeyboardButtonStyle){
 }
 
 
+
+
 - (void)buttonStyleDidChange{
 
     const ZZZKeyboardButtonStyle style = self.style;
@@ -102,7 +103,6 @@ typedef NS_ENUM(NSInteger,ZZZKeyboardButtonStyle){
     }
 
 
-
     UIColor *textColor = nil;
     UIColor *highlightedTextColor = nil;
     if (style == ZZZKeyboardButtonStyleGrey) {
@@ -112,7 +112,6 @@ typedef NS_ENUM(NSInteger,ZZZKeyboardButtonStyle){
         textColor = [UIColor blackColor];
         highlightedTextColor = [UIColor whiteColor];
     }
-
 
     [self setTitleColor:textColor forState:UIControlStateNormal];
     [self setTitleColor:highlightedTextColor forState:UIControlStateHighlighted];
@@ -127,12 +126,14 @@ typedef NS_ENUM(NSInteger,ZZZKeyboardButtonStyle){
 
 
 - (void)updateButtonAppearance{
+
     if (self.isHighlighted || self.isSelected) {
         self.backgroundColor = self.highlightedBgColor;
-        self.imageView.tintColor = self.textColor;
+        self.imageView.tintColor = self.highlightedTextColor;
+
     }else{
         self.backgroundColor = self.bgColor;
-        self.imageView.tintColor = self.highlightedTextColor;
+        self.imageView.tintColor = self.textColor;
     }
 }
 
@@ -191,16 +192,14 @@ static __weak id currentFirstResponder;
 
 
 #define HEIGHT 196// 240 - 44
-
-static NSInteger currentIndex = 0;
-static NSInteger previousIndex = 5645;
+#define BUTTONTAG 5644
 
 @interface ZZZKeyboard()<UIScrollViewDelegate>
 @property (nonatomic,strong)UIScrollView *scrollView;
 @property (nonatomic,strong)UIView *provinceView;
 @property (nonatomic,strong)UIView *letterView;
 @property (nonatomic,strong)UIView *numView;
-
+@property (nonatomic,strong)NSMutableDictionary *buttonDictionary;
 @end
 
 @implementation ZZZKeyboard
@@ -227,16 +226,18 @@ static NSInteger previousIndex = 5645;
 
 
 - (void)initKeyboard{
-    //[self addSubview:self.scrollView];
     
     NSArray *provinceArray = @[@"京",@"渝",@"黑",@"闽",@"鄂",@"川",@"甘",@"津",@"晋",@"苏",@"赣",@"湘",@"黔",@"青",@"蒙",@"沪",@"辽",@"浙",@"鲁",@"粤",@"云",@"藏",@"宁",@"冀",@"吉",@"皖",@"豫",@"琼",@"陕",@"桂",@"新"];
-    [self CreateButtonWithArray:provinceArray columeCount:8 backspaceButtonIndex:7 textFont:[UIFont systemFontOfSize:18 weight:UIFontWeightRegular] for:self.provinceView];
+    [self createButtonWithArray:provinceArray columeCount:8 backspaceButtonIndex:7 textFont:[UIFont systemFontOfSize:18 weight:UIFontWeightRegular] for:self.provinceView];
     
     NSArray *leeterArray = @[@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z"];
-    [self CreateButtonWithArray:leeterArray columeCount:7 backspaceButtonIndex:6 textFont:[UIFont systemFontOfSize:18 weight:UIFontWeightRegular] for:self.letterView ];
+    [self createButtonWithArray:leeterArray columeCount:7 backspaceButtonIndex:6 textFont:[UIFont systemFontOfSize:18 weight:UIFontWeightRegular] for:self.letterView ];
     
     NSArray *numArray = @[@"1",@"2",@"3",@"4",@"5",@"6",@"0",@"7",@"8",@"9"];
-    [self CreateButtonWithArray:numArray columeCount:4 backspaceButtonIndex:3 textFont:[UIFont systemFontOfSize:18 weight:UIFontWeightRegular]for:self.numView];
+    [self createButtonWithArray:numArray columeCount:4 backspaceButtonIndex:3 textFont:[UIFont systemFontOfSize:18 weight:UIFontWeightRegular]for:self.numView];
+
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(highlightedPanGestureRecognizer:)];
+    [self addGestureRecognizer:pan];
 }
 
 
@@ -261,12 +262,11 @@ static NSInteger previousIndex = 5645;
             [button addTarget:self action:@selector(dismissKeyboard:) forControlEvents:UIControlEventTouchUpInside];
         }else {
             button.style = ZZZKeyboardButtonStyleGrey;
-            button.tag = 5644 + i;
+            button.tag = BUTTONTAG + i;
             [button setTitleColor:[UIColor blackColor] forState:UIControlStateSelected];
             [button addTarget:self action:@selector(handleToolButton:) forControlEvents:UIControlEventTouchUpInside];
             if (i == 1) {
                 button.selected = YES;
-                NSLog(@"TAG :%ld",(long)button.tag);
             }
         }
         [self addSubview:button];
@@ -276,27 +276,7 @@ static NSInteger previousIndex = 5645;
 
 
 - (void)handleToolButton:(UIButton *)sender{
-
-    currentIndex = sender.tag;
-    UIButton *currentButton = (UIButton *)[self viewWithTag:currentIndex];
-    currentButton.selected = YES;
-    currentButton.userInteractionEnabled = NO;
-
-     NSLog(@"previousButton :%@,enabled:%d",sender  ,sender.userInteractionEnabled);
-
-    UIButton *previousButton = (UIButton *)[self viewWithTag:previousIndex];
-    previousButton.selected = NO;
-    currentButton.userInteractionEnabled = YES;
-    previousIndex = currentIndex;
-    
-    
-    if (sender.tag == 5645) {
-        [self.scrollView setContentOffset:CGPointZero animated:YES];
-    }else if (sender.tag == 5646){
-        [self.scrollView setContentOffset:CGPointMake(SCREENWIDE, 0) animated:YES];
-    }else if (sender.tag == 5647){
-        [self.scrollView setContentOffset:CGPointMake(2 * SCREENWIDE, 0) animated:YES];
-    }
+    [self changeButtonSelectWithIndex:sender.tag];
 }
 
 
@@ -327,8 +307,6 @@ static NSInteger previousIndex = 5645;
 }
 
 
-
-
 /**
  *  批量给View上添加button
  *
@@ -338,8 +316,8 @@ static NSInteger previousIndex = 5645;
  *  @param font      字体
  *  @param superView 要添加的View
  */
-- (void)CreateButtonWithArray:(NSArray *)array columeCount:(NSUInteger)count backspaceButtonIndex:(NSUInteger)index textFont:(UIFont *)font for:(UIView *)superView{
-    
+- (void)createButtonWithArray:(NSArray *)array columeCount:(NSUInteger)count backspaceButtonIndex:(NSUInteger)index textFont:(UIFont *)font for:(UIView *)superView{
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     NSMutableArray *nameArray = [NSMutableArray arrayWithArray:array];
     [nameArray insertObject:@"" atIndex:index];
     
@@ -354,6 +332,9 @@ static NSInteger previousIndex = 5645;
     for (int i = 0; i < nameArray.count ; i ++) {
         ZZZKeyboardButton *button = [ZZZKeyboardButton keyboardButtonWithStyle:ZZZKeyboardButtonStyleWhite];
         button.frame = CGRectMake((i % count) * width, (i / count) * height + 0.5, width - 0.5 , height - 0.5);
+        [button setExclusiveTouch:YES];
+        [button addTarget:self action:@selector(buttonPlayClick:) forControlEvents:UIControlEventTouchDown];
+        //[button setBackgroundImage:[[UIImage imageNamed:@"zzz1"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, 5, 5) ] forState:UIControlStateHighlighted];
         if (i == index) {
             [button setImage:[UIImage imageNamed:@"ic_keyboard_backspace_small"] forState:UIControlStateNormal];
             [button addTarget:self action:@selector(buttonBackspace:) forControlEvents:UIControlEventTouchUpInside];
@@ -368,22 +349,67 @@ static NSInteger previousIndex = 5645;
             frame.size.height = height * 2 - 0.5;
             button.frame = frame;
         }
-        
+
+        [dic setObject:button forKey:nameArray[i]];
     }
+    [self.buttonDictionary setValuesForKeysWithDictionary:dic];
 }
 
 - (void)buttonInput:(UIButton *)sender{
     
     id <UIKeyInput>keyInput = self.keyInput;
     [keyInput insertText:sender.titleLabel.text];
-    
-}
 
+}
 
 - (void)buttonBackspace:(UIButton *)sender{
     id <UIKeyInput> keyInput = self.keyInput;
     [keyInput deleteBackward];
 }
+
+- (void)buttonPlayClick:(UIButton *)sender{
+    [[UIDevice currentDevice] playInputClick];
+}
+
+
+- (void)highlightedPanGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer{
+
+    CGPoint point = [panGestureRecognizer locationInView:self];
+
+    if (panGestureRecognizer.state == UIGestureRecognizerStateChanged || panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+
+        for (UIButton *button in self.buttonDictionary.objectEnumerator) {
+            BOOL points = CGRectContainsPoint(button.frame, point) && !button.isHidden ;
+
+            if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
+                [button setHighlighted:points];
+            }else{
+                [button setHighlighted:NO];
+            }
+
+//            if (panGestureRecognizer.state == UIGestureRecognizerStateEnded && points) {
+//                [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+//            }
+        }
+    }
+}
+
+//
+//- (void)tapGestureRecognizer:(UITapGestureRecognizer *)tapGestureRecognizer{
+//    NSLog(@"都是大发的萨芬的");
+//    CGPoint point = [tapGestureRecognizer locationInView:self];
+//    if (tapGestureRecognizer.state == UIGestureRecognizerStateBegan) {
+//        for (UIButton *button in self.buttonDictionary.objectEnumerator) {
+//            BOOL points = CGRectContainsPoint(button.frame, point);
+//            if (points) {
+//                NSLog(@"%@",button);
+//                [button setHighlighted:YES];
+//            }else{
+//                [button setHighlighted:NO];
+//            }
+//        }
+//    }
+//}
 
 
 
@@ -402,7 +428,6 @@ static NSInteger previousIndex = 5645;
     range.location = 4;
     [[NSScanner scannerWithString:[hexColor substringWithRange:range]] scanHexInt:&blue];
 
-
     return [UIColor colorWithRed:(float)(red / 255.0f) green:(float)(green / 255.0f) blue:(float)(blue / 255.0f) alpha:1];
 }
 
@@ -413,22 +438,62 @@ static NSInteger previousIndex = 5645;
     CGPoint offset = scrollView.contentOffset;
     NSInteger index = offset.x / SCREENWIDE;
     
-    UIButton *provinceButton = [self viewWithTag:5645 + index];
-    provinceButton.selected = NO;
-    
-    UIButton *button = [self viewWithTag:5645 + index];
-    button.selected = YES;
-//    if (index == 1) {
-//        
-//    }else if(index == 2){
-//        
-//    }else if (index == 3){
-//        
-//    }
-    
+    [self changeButtonSelectWithIndex:index];
+
+
 }
 
 
+- (void)changeButtonSelectWithIndex:(NSInteger)index{
+
+    if (index > 3) {
+        index -= BUTTONTAG + 1;
+    }
+
+    if (index == 0) {
+        UIButton *provinceButton = [self viewWithTag:BUTTONTAG + 1];
+        provinceButton.userInteractionEnabled = NO;
+        provinceButton.selected = YES;
+
+        UIButton *leeterButton = [self viewWithTag:BUTTONTAG + 2];
+        leeterButton.userInteractionEnabled = YES;
+        leeterButton.selected = NO;
+
+        UIButton *numButton = [self viewWithTag:BUTTONTAG + 3];
+        numButton.userInteractionEnabled = YES;
+        numButton.selected = NO;
+
+        [self.scrollView setContentOffset:CGPointZero animated:YES];
+    }else if(index == 1){
+        UIButton *provinceButton = [self viewWithTag:BUTTONTAG + 1];
+        provinceButton.userInteractionEnabled = YES;
+        provinceButton.selected = NO;
+
+        UIButton *leeterButton = [self viewWithTag:BUTTONTAG + 2];
+        leeterButton.userInteractionEnabled = NO;
+        leeterButton.selected = YES;
+
+        UIButton *numButton = [self viewWithTag:BUTTONTAG + 3];
+        numButton.userInteractionEnabled = YES;
+        numButton.selected = NO;
+
+        [self.scrollView setContentOffset:CGPointMake(SCREENWIDE, 0) animated:YES];
+    }else if (index == 2){
+        UIButton *provinceButton = [self viewWithTag:BUTTONTAG + 1];
+        provinceButton.userInteractionEnabled = YES;
+        provinceButton.selected = NO;
+
+        UIButton *leeterButton = [self viewWithTag:BUTTONTAG + 2];
+        leeterButton.userInteractionEnabled = YES;
+        leeterButton.selected = NO;
+
+        UIButton *numButton = [self viewWithTag:BUTTONTAG + 3];
+        numButton.userInteractionEnabled = NO;
+        numButton.selected = YES;
+
+        [self.scrollView setContentOffset:CGPointMake(2 * SCREENWIDE, 0) animated:YES];
+    }
+}
 
 
 #pragma mark getter
@@ -439,7 +504,9 @@ static NSInteger previousIndex = 5645;
         _scrollView.contentSize = CGSizeMake( 3 * SCREENWIDE, HEIGHT);
         _scrollView.pagingEnabled = YES;
         _scrollView.showsHorizontalScrollIndicator = NO;
+        _scrollView.bounces = NO;
         _scrollView.delegate = self;
+        [_scrollView setDelaysContentTouches:NO];
         [self addSubview:_scrollView];
     }
     return _scrollView;
@@ -448,7 +515,7 @@ static NSInteger previousIndex = 5645;
 
 - (UIView *)provinceView{
     if (!_provinceView) {
-        _provinceView = [[UIView alloc]initWithFrame:_scrollView.frame];
+        _provinceView = [[UIView alloc]initWithFrame:self.scrollView.frame];
         [self.scrollView addSubview:_provinceView];
     }
     return _provinceView;
@@ -456,7 +523,6 @@ static NSInteger previousIndex = 5645;
 
 
 - (UIView *)letterView{
-
     if (!_letterView) {
         _letterView = [[UIView alloc]initWithFrame:CGRectMake(SCREENWIDE, 0, SCREENWIDE, HEIGHT)];
         [self.scrollView addSubview:_letterView];
@@ -471,6 +537,13 @@ static NSInteger previousIndex = 5645;
         [self.scrollView addSubview:_numView];
     }
     return _numView;
+}
+
+- (NSMutableDictionary *)buttonDictionary{
+    if (!_buttonDictionary) {
+        _buttonDictionary = [NSMutableDictionary dictionary];
+    }
+    return _buttonDictionary;
 }
 
 
