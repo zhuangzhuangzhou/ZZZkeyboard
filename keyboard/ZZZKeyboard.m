@@ -291,7 +291,6 @@ static __weak id currentFirstResponder;
     if (![keyInput conformsToProtocol:@protocol(UITextInput)]) {
         return nil;
     }
-
     _keyInput = keyInput;
 
     return keyInput;
@@ -359,13 +358,27 @@ static __weak id currentFirstResponder;
     
     id <UIKeyInput>keyInput = self.keyInput;
     [keyInput insertText:sender.titleLabel.text];
-
+    
+    self.isAutoScroll = YES;
+    if (self.isAutoScroll) {
+        unichar c = [sender.titleLabel.text characterAtIndex:0];
+        if (c > 0x4e00 && c < 0x9FFF) {//汉字Unicode编码
+            //NSLog(@"%@",sender.titleLabel.text);
+            [self.scrollView setContentOffset:CGPointMake(SCREENWIDE, 0) animated:YES];
+            [self changeButtonSelectWithIndex:1];
+        }else if (c >= 'A' && c <= 'Z'){
+            [self.scrollView setContentOffset:CGPointMake(SCREENWIDE * 2, 0) animated:YES];
+            [self changeButtonSelectWithIndex:2];
+        }
+    }
 }
 
 - (void)buttonBackspace:(UIButton *)sender{
     id <UIKeyInput> keyInput = self.keyInput;
+
     [keyInput deleteBackward];
 }
+
 
 - (void)buttonPlayClick:(UIButton *)sender{
     [[UIDevice currentDevice] playInputClick];
@@ -396,7 +409,6 @@ static __weak id currentFirstResponder;
 
 //
 //- (void)tapGestureRecognizer:(UITapGestureRecognizer *)tapGestureRecognizer{
-//    NSLog(@"都是大发的萨芬的");
 //    CGPoint point = [tapGestureRecognizer locationInView:self];
 //    if (tapGestureRecognizer.state == UIGestureRecognizerStateBegan) {
 //        for (UIButton *button in self.buttonDictionary.objectEnumerator) {
@@ -411,6 +423,18 @@ static __weak id currentFirstResponder;
 //    }
 //}
 
+- (void)textDidChange:(id<UITextInput>)textInput{
+    NSLog(@"%@",textInput);
+}
+
+//- (id<UITextInputDelegate>)textInput{
+//    id <UITextInputDelegate>textInput = self.textInput;
+//    return textInput;
+//}
+
+- (void)textWillChange:(id<UITextInput>)textInput{
+    NSLog(@"~~~~~~%@",textInput);
+}
 
 
 //色值

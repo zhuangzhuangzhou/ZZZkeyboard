@@ -27,22 +27,6 @@
 
     [self.view addSubview:textField];
 
-
-
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(0, 0, 50, 50);
-    [button setBackgroundColor:[UIColor grayColor]];
-    button.center = self.view.center;
-    [button setTitle:@"你好" forState:UIControlStateNormal];
-    [button setTitle:@"高亮" forState:UIControlStateHighlighted];
-    [button setTitle:@"选中" forState:UIControlStateSelected];
-
-    [button setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
-    [button setTitleColor:[UIColor yellowColor] forState:UIControlStateSelected];
-
-
-    [self.view addSubview:button];
 }
 
 - (void)didReceiveMemoryWarning {

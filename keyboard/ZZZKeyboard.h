@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZZZKeyboard : UIInputView
+@interface ZZZKeyboard : UIInputView<UITextInputDelegate>
 @property (nonatomic,weak) id <UIKeyInput> keyInput;
 
+
+@property (nonatomic,assign) BOOL isAutoScroll;
 @end
