@@ -334,7 +334,6 @@ static __weak id currentFirstResponder;
         button.frame = CGRectMake((i % count) * width, (i / count) * height + 0.5, width - 0.5 , height - 0.5);
         [button setExclusiveTouch:YES];
         [button addTarget:self action:@selector(buttonPlayClick:) forControlEvents:UIControlEventTouchDown];
-        //[button setBackgroundImage:[[UIImage imageNamed:@"zzz1"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, 5, 5) ] forState:UIControlStateHighlighted];
         if (i == index) {
             [button setImage:[UIImage imageNamed:@"ic_keyboard_backspace_small"] forState:UIControlStateNormal];
             [button addTarget:self action:@selector(buttonBackspace:) forControlEvents:UIControlEventTouchUpInside];
@@ -396,7 +395,7 @@ static __weak id currentFirstResponder;
 
 //
 //- (void)tapGestureRecognizer:(UITapGestureRecognizer *)tapGestureRecognizer{
-//    NSLog(@"都是大发的萨芬的");
+
 //    CGPoint point = [tapGestureRecognizer locationInView:self];
 //    if (tapGestureRecognizer.state == UIGestureRecognizerStateBegan) {
 //        for (UIButton *button in self.buttonDictionary.objectEnumerator) {
