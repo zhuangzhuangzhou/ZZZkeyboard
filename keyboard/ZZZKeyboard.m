@@ -408,10 +408,7 @@ static __weak id currentFirstResponder;
 
 //
 //- (void)tapGestureRecognizer:(UITapGestureRecognizer *)tapGestureRecognizer{
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
 //    CGPoint point = [tapGestureRecognizer locationInView:self];
 //    if (tapGestureRecognizer.state == UIGestureRecognizerStateBegan) {
 //        for (UIButton *button in self.buttonDictionary.objectEnumerator) {

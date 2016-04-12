@@ -20,7 +20,6 @@
 		3A5E4D061CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4D021CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png */; };
 		3A5E4D071CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4D031CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png */; };
 		3A5E4D081CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4D041CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png */; };
-		3A5E4D151CAA61BF00AE4DC6 /* zzz1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4D141CAA61BF00AE4DC6 /* zzz1.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +62,6 @@
 		3A5E4D021CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_keyboard_backspace_small@2x.png"; sourceTree = "<group>"; };
 		3A5E4D031CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_keyboard_folded_small.png; sourceTree = "<group>"; };
 		3A5E4D041CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_keyboard_folded_small@2x.png"; sourceTree = "<group>"; };
-		3A5E4D141CAA61BF00AE4DC6 /* zzz1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = zzz1.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,7 +96,6 @@
 				3A5E4CE41CA8D11000AE4DC6 /* keyboardTests */,
 				3A5E4CEF1CA8D11000AE4DC6 /* keyboardUITests */,
 				3A5E4CC91CA8D11000AE4DC6 /* Products */,
-				3A5E4D141CAA61BF00AE4DC6 /* zzz1.png */,
 			);
 			sourceTree = "<group>";
 		};
@@ -265,7 +262,6 @@
 			files = (
 				3A5E4D061CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png in Resources */,
 				3A5E4CDB1CA8D11000AE4DC6 /* LaunchScreen.storyboard in Resources */,
-				3A5E4D151CAA61BF00AE4DC6 /* zzz1.png in Resources */,
 				3A5E4D071CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png in Resources */,
 				3A5E4CD81CA8D11000AE4DC6 /* Assets.xcassets in Resources */,
 				3A5E4D051CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small.png in Resources */,
