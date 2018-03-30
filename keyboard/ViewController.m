@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import "ZZZKeyboard.h"
-@interface ViewController ()<UITextInputDelegate,UITextFieldDelegate>
+@interface ViewController ()
 
 @end
 
@@ -22,27 +22,10 @@
 
     textField.placeholder = @"请输入xxxxx";
     textField.inputView = keyboard;
-    textField.delegate = self;
-    textField.inputDelegate = self;
-    
+
     [self.view addSubview:textField];
 }
 
-
-
-- (void)selectionWillChange:(nullable id <UITextInput>)textInput{
-    
-}
-- (void)selectionDidChange:(nullable id <UITextInput>)textInput{
-    
-}
-- (void)textWillChange:(nullable id <UITextInput>)textInput{
-    
-}
-- (void)textDidChange:(nullable id <UITextInput>)textInput{
-    
-    
-}
 
 
 - (void)didReceiveMemoryWarning {
