@@ -2,8 +2,8 @@
 //  AppDelegate.m
 //  keyboard
 //
-//  Created by 货大大 on 15/3/28.
-//  Copyright © 2016年 货大大. All rights reserved.
+//  Created by 大大 on 15/3/28.
+//  Copyright © 2015年 大大. All rights reserved.
 //
 
 #import "AppDelegate.h"
