@@ -7,162 +7,7 @@
 //
 
 #import "ZZZKeyboard.h"
-
-
-#pragma mark BUTTON 组件
-
-
-typedef NS_ENUM(NSInteger,ZZZKeyboardButtonStyle){
-    ZZZKeyboardButtonStyleWhite,
-    ZZZKeyboardButtonStyleGrey,
-    ZZZKeyboardButtonStyleDismiss,
-    ZZZKeyboardButtonStyleDone
-};
-
-
-@interface ZZZKeyboardButton : UIButton
-
-+(ZZZKeyboardButton *)keyboardButtonWithStyle:(ZZZKeyboardButtonStyle)style;
-
-
-@property (nonatomic,strong) UIColor *bgColor;//背景色
-@property (nonatomic,strong) UIColor *highlightedBgColor;//选中-背景色
-
-@property (nonatomic,strong) UIColor *textColor;//文字颜色
-@property (nonatomic,strong) UIColor *highlightedTextColor;//选中-文字颜色
-
-@property (nonatomic,assign) ZZZKeyboardButtonStyle style;//样式
-@end
-
-@implementation ZZZKeyboardButton
-
-+(ZZZKeyboardButton *)keyboardButtonWithStyle:(ZZZKeyboardButtonStyle)style{
-    ZZZKeyboardButton *button = [self buttonWithType:UIButtonTypeCustom];
-    button.style = style;
-    return button;
-}
-
-
-- (instancetype)initWithFrame:(CGRect)frame{
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self buttonStyleDidChange];
-    }
-    return self;
-}
-
-
-- (void)setStyle:(ZZZKeyboardButtonStyle)style{
-    if (style != _style) {
-        _style = style;
-        [self buttonStyleDidChange];
-    }
-}
-
-
-- (void)willMoveToWindow:(UIWindow *)newWindow{
-    [super willMoveToWindow:newWindow];
-    if (newWindow) {
-        [self updateButtonAppearance];
-    }
-}
-
-
-- (void)setHighlighted:(BOOL)highlighted{
-    [super setHighlighted:highlighted];
-    [self updateButtonAppearance];
-}
-
-
-- (void)setSelected:(BOOL)selected{
-    [super setSelected:selected];
-    [self updateButtonAppearance];
-}
-
-
-
-
-- (void)buttonStyleDidChange{
-
-    const ZZZKeyboardButtonStyle style = self.style;
-
-    UIColor *bgColor = nil;
-    UIColor *highlightedBgColor = nil;
-    if (style == ZZZKeyboardButtonStyleWhite) {
-        bgColor = [UIColor whiteColor];
-        highlightedBgColor = [self getColor:@"00B365"];
-    }else if(style == ZZZKeyboardButtonStyleGrey){
-        bgColor = [self getColor:@"E4E8ED"];
-        highlightedBgColor =[UIColor whiteColor];
-    }else if (style == ZZZKeyboardButtonStyleDone){
-        bgColor = [self getColor:@"00B365"];
-        highlightedBgColor = [self getColor:@"008C4F"];
-    }else if (style == ZZZKeyboardButtonStyleDismiss){
-        bgColor = [self getColor:@"E4E8ED"];
-        highlightedBgColor = [self getColor:@"CBD1D6"];
-    }
-
-
-    UIColor *textColor = nil;
-    UIColor *highlightedTextColor = nil;
-    if (style == ZZZKeyboardButtonStyleGrey) {
-        textColor = [self getColor:@"7D7F82"];
-        highlightedTextColor = [UIColor blackColor];
-    }else if(style == ZZZKeyboardButtonStyleWhite){
-        textColor = [UIColor blackColor];
-        highlightedTextColor = [UIColor whiteColor];
-    }
-
-    [self setTitleColor:textColor forState:UIControlStateNormal];
-    [self setTitleColor:highlightedTextColor forState:UIControlStateHighlighted];
-    [self setTitleColor:highlightedTextColor forState:UIControlStateSelected];
-
-
-    self.bgColor = bgColor;
-    self.highlightedBgColor = highlightedBgColor;
-    self.textColor = textColor;
-    self.highlightedTextColor = highlightedTextColor;
-}
-
-
-- (void)updateButtonAppearance{
-
-    if (self.isHighlighted || self.isSelected) {
-        self.backgroundColor = self.highlightedBgColor;
-        self.imageView.tintColor = self.highlightedTextColor;
-
-    }else{
-        self.backgroundColor = self.bgColor;
-        self.imageView.tintColor = self.textColor;
-    }
-}
-
-
-//色值
-- (UIColor *)getColor:(NSString *)hexColor{
-    unsigned int red,green,blue;
-    NSRange range;
-    range.length = 2;
-
-    range.location = 0;
-
-    [[NSScanner scannerWithString:[hexColor substringWithRange:range]] scanHexInt: &red ];
-    range.location = 2;
-    [[NSScanner scannerWithString:[hexColor substringWithRange:range]] scanHexInt: &green ];
-
-    range.location = 4;
-    [[NSScanner scannerWithString:[hexColor substringWithRange:range]] scanHexInt:&blue];
-
-
-    return [UIColor colorWithRed:(float)(red / 255.0f) green:(float)(green / 255.0f) blue:(float)(blue / 255.0f) alpha:1];
-}
-
-@end
-
-
-
-/*********************************************************************/
-
+#import "ZZZKeyboardButton.h"
 
 static __weak id currentFirstResponder;
 @implementation UIResponder(FirstResponder)
@@ -184,7 +29,6 @@ static __weak id currentFirstResponder;
 @end
 
 
-/*********************************************************************/
 
 
 #define SCREENWIDE CGRectGetWidth([UIScreen mainScreen].bounds)
@@ -192,7 +36,7 @@ static __weak id currentFirstResponder;
 
 
 #define HEIGHT 196// 240 - 44
-#define BUTTONTAG 5644
+#define BUTTONTAG 2000
 
 @interface ZZZKeyboard()<UIScrollViewDelegate>
 @property (nonatomic,strong)UIScrollView *scrollView;
@@ -204,29 +48,29 @@ static __weak id currentFirstResponder;
 
 @implementation ZZZKeyboard
 
+#pragma mark - life cycle
 - (instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame inputViewStyle:UIInputViewStyleDefault];
     if (self) {
         [self initToolButton];
         [self initKeyboard];
+        [self initPanGestureRecognizer];
     }
     return self;
 }
-
 
 - (instancetype)initWithFrame:(CGRect)frame inputViewStyle:(UIInputViewStyle)inputViewStyle{
     self = [super initWithFrame:frame inputViewStyle:inputViewStyle];
     if (self) {
-
+        [self initToolButton];
+        [self initKeyboard];
+        [self initPanGestureRecognizer];
     }
     return self;
 }
 
-
-
-
+//初始化键盘主体
 - (void)initKeyboard{
-    
     NSArray *provinceArray = @[@"京",@"渝",@"黑",@"闽",@"鄂",@"川",@"甘",@"津",@"晋",@"苏",@"赣",@"湘",@"黔",@"青",@"蒙",@"沪",@"辽",@"浙",@"鲁",@"粤",@"云",@"藏",@"宁",@"冀",@"吉",@"皖",@"豫",@"琼",@"陕",@"桂",@"新"];
     [self createButtonWithArray:provinceArray columeCount:8 backspaceButtonIndex:7 textFont:[UIFont systemFontOfSize:18 weight:UIFontWeightRegular] for:self.provinceView];
     
@@ -235,13 +79,10 @@ static __weak id currentFirstResponder;
     
     NSArray *numArray = @[@"1",@"2",@"3",@"4",@"5",@"6",@"0",@"7",@"8",@"9"];
     [self createButtonWithArray:numArray columeCount:4 backspaceButtonIndex:3 textFont:[UIFont systemFontOfSize:18 weight:UIFontWeightRegular]for:self.numView];
-
-    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(highlightedPanGestureRecognizer:)];
-    [self addGestureRecognizer:pan];
 }
 
 
-
+//初始化键盘功能区
 - (void)initToolButton{
     NSArray *array = @[@"",@"省",@"ABC",@"123",@"确定"];
     float width = SCREENWIDE / 5 ;
@@ -273,12 +114,17 @@ static __weak id currentFirstResponder;
     }
 }
 
-
-
-- (void)handleToolButton:(UIButton *)sender{
-    [self changeButtonSelectWithIndex:sender.tag];
+//初始化手势
+- (void)initPanGestureRecognizer{
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(highlightedPanGestureRecognizer:)];
+    [self addGestureRecognizer:pan];
 }
 
+
+
+
+
+#pragma mark - UIKeyInput
 
 - (id<UIKeyInput>)keyInput
 {
@@ -292,11 +138,108 @@ static __weak id currentFirstResponder;
         return nil;
     }
     _keyInput = keyInput;
-
     return keyInput;
 }
 
 
+//- (void)tapGestureRecognizer:(UITapGestureRecognizer *)tapGestureRecognizer{
+
+//    CGPoint point = [tapGestureRecognizer locationInView:self];
+//    if (tapGestureRecognizer.state == UIGestureRecognizerStateBegan) {
+//        for (UIButton *button in self.buttonDictionary.objectEnumerator) {
+//            BOOL points = CGRectContainsPoint(button.frame, point);
+//            if (points) {
+//                NSLog(@"%@",button);
+//                [button setHighlighted:YES];
+//            }else{
+//                [button setHighlighted:NO];
+//            }
+//        }
+//    }
+//}
+
+- (void)textDidChange:(id<UITextInput>)textInput{
+    NSLog(@"%@",textInput);
+}
+
+- (id<UITextInputDelegate>)textInput{
+    id <UITextInputDelegate>textInput = self.textInput;
+    return textInput;
+}
+
+- (void)textWillChange:(id<UITextInput>)textInput{
+    NSLog(@"~~~~~~%@",textInput);
+}
+
+- (void)selectionDidChange:(nullable id<UITextInput>)textInput {
+    
+}
+
+- (void)selectionWillChange:(nullable id<UITextInput>)textInput {
+    
+}
+
+#pragma mark - event response
+
+/**
+ 手势响应方法
+ */
+- (void)highlightedPanGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer{
+    CGPoint point = [panGestureRecognizer locationInView:self];
+    if (panGestureRecognizer.state == UIGestureRecognizerStateChanged || panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        for (UIButton *button in self.buttonDictionary.objectEnumerator) {
+            BOOL points = CGRectContainsPoint(button.frame, point) && !button.isHidden ;
+            if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
+                [button setHighlighted:points];
+            }else{
+                [button setHighlighted:NO];
+            }
+            //            if (panGestureRecognizer.state == UIGestureRecognizerStateEnded && points) {
+            //                [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+            //            }
+        }
+    }
+}
+
+/**
+ 功能区按钮响应方法
+ */
+- (void)handleToolButton:(UIButton *)sender{
+    [self changeButtonSelectWithIndex:sender.tag];
+}
+
+
+/**
+ 输入按钮方法
+ */
+- (void)buttonInput:(UIButton *)sender{
+    id <UIKeyInput>keyInput = self.keyInput;
+    [keyInput insertText:sender.titleLabel.text];
+    self.isAutoScroll = YES;
+    if (self.isAutoScroll) {
+        unichar c = [sender.titleLabel.text characterAtIndex:0];
+        if (c > 0x4e00 && c < 0x9FFF) {//汉字Unicode编码
+            //NSLog(@"%@",sender.titleLabel.text);
+            [self.scrollView setContentOffset:CGPointMake(SCREENWIDE, 0) animated:YES];
+            [self changeButtonSelectWithIndex:1];
+        }else if (c >= 'A' && c <= 'Z'){
+            [self.scrollView setContentOffset:CGPointMake(SCREENWIDE * 2, 0) animated:YES];
+            [self changeButtonSelectWithIndex:2];
+        }
+    }
+}
+
+/**
+ 退格按钮方法
+ */
+- (void)buttonBackspace:(UIButton *)sender{
+    id <UIKeyInput> keyInput = self.keyInput;
+    [keyInput deleteBackward];
+}
+
+/**
+ 消失按钮方法
+ */
 - (void)dismissKeyboard:(UIButton *)sender
 {
     UIResponder *firstResponder = self.keyInput;
@@ -305,13 +248,18 @@ static __weak id currentFirstResponder;
     }
 }
 
+- (void)buttonPlayClick:(UIButton *)sender{
+    [[UIDevice currentDevice] playInputClick];
+}
 
+
+#pragma mark - private methods
 /**
  *  批量给View上添加button
  *
  *  @param array     包含button名字的数组
- *  @param count     列数
- *  @param index     退格
+ *  @param count     每行的列数
+ *  @param index     退格所在位置
  *  @param font      字体
  *  @param superView 要添加的View
  */
@@ -340,187 +288,82 @@ static __weak id currentFirstResponder;
             [button setTitle:nameArray[i] forState:UIControlStateNormal];
             [button addTarget:self action:@selector(buttonInput:) forControlEvents:UIControlEventTouchUpInside];
         }
-            [superView addSubview:button];
+        [superView addSubview:button];
         
         if ([button.titleLabel.text isEqualToString:@"0"]) {
             CGRect frame = button.frame;
             frame.size.height = height * 2 - 0.5;
             button.frame = frame;
         }
-
         [dic setObject:button forKey:nameArray[i]];
     }
     [self.buttonDictionary setValuesForKeysWithDictionary:dic];
 }
 
-- (void)buttonInput:(UIButton *)sender{
-    
-    id <UIKeyInput>keyInput = self.keyInput;
-    [keyInput insertText:sender.titleLabel.text];
-    
-    self.isAutoScroll = YES;
-    if (self.isAutoScroll) {
-        unichar c = [sender.titleLabel.text characterAtIndex:0];
-        if (c > 0x4e00 && c < 0x9FFF) {//汉字Unicode编码
-            //NSLog(@"%@",sender.titleLabel.text);
-            [self.scrollView setContentOffset:CGPointMake(SCREENWIDE, 0) animated:YES];
-            [self changeButtonSelectWithIndex:1];
-        }else if (c >= 'A' && c <= 'Z'){
-            [self.scrollView setContentOffset:CGPointMake(SCREENWIDE * 2, 0) animated:YES];
-            [self changeButtonSelectWithIndex:2];
-        }
-    }
-}
 
-- (void)buttonBackspace:(UIButton *)sender{
-    id <UIKeyInput> keyInput = self.keyInput;
-
-    [keyInput deleteBackward];
-}
-
-
-- (void)buttonPlayClick:(UIButton *)sender{
-    [[UIDevice currentDevice] playInputClick];
-}
-
-
-- (void)highlightedPanGestureRecognizer:(UIPanGestureRecognizer *)panGestureRecognizer{
-
-    CGPoint point = [panGestureRecognizer locationInView:self];
-
-    if (panGestureRecognizer.state == UIGestureRecognizerStateChanged || panGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-
-        for (UIButton *button in self.buttonDictionary.objectEnumerator) {
-            BOOL points = CGRectContainsPoint(button.frame, point) && !button.isHidden ;
-
-            if (panGestureRecognizer.state == UIGestureRecognizerStateChanged) {
-                [button setHighlighted:points];
-            }else{
-                [button setHighlighted:NO];
-            }
-
-//            if (panGestureRecognizer.state == UIGestureRecognizerStateEnded && points) {
-//                [button sendActionsForControlEvents:UIControlEventTouchUpInside];
-//            }
-        }
-    }
-}
-
-//
-//- (void)tapGestureRecognizer:(UITapGestureRecognizer *)tapGestureRecognizer{
-
-//    CGPoint point = [tapGestureRecognizer locationInView:self];
-//    if (tapGestureRecognizer.state == UIGestureRecognizerStateBegan) {
-//        for (UIButton *button in self.buttonDictionary.objectEnumerator) {
-//            BOOL points = CGRectContainsPoint(button.frame, point);
-//            if (points) {
-//                NSLog(@"%@",button);
-//                [button setHighlighted:YES];
-//            }else{
-//                [button setHighlighted:NO];
-//            }
-//        }
-//    }
-//}
-
-- (void)textDidChange:(id<UITextInput>)textInput{
-    NSLog(@"%@",textInput);
-}
-
-//- (id<UITextInputDelegate>)textInput{
-//    id <UITextInputDelegate>textInput = self.textInput;
-//    return textInput;
-//}
-
-- (void)textWillChange:(id<UITextInput>)textInput{
-    NSLog(@"~~~~~~%@",textInput);
-}
-
-
-//色值
-- (UIColor *)getColor:(NSString *)hexColor{
-    unsigned int red,green,blue;
-    NSRange range;
-    range.length = 2;
-
-    range.location = 0;
-
-    [[NSScanner scannerWithString:[hexColor substringWithRange:range]] scanHexInt: &red ];
-    range.location = 2;
-    [[NSScanner scannerWithString:[hexColor substringWithRange:range]] scanHexInt: &green ];
-
-    range.location = 4;
-    [[NSScanner scannerWithString:[hexColor substringWithRange:range]] scanHexInt:&blue];
-
-    return [UIColor colorWithRed:(float)(red / 255.0f) green:(float)(green / 255.0f) blue:(float)(blue / 255.0f) alpha:1];
-}
-
-#pragma mark scrollView delegate
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    
-    CGPoint offset = scrollView.contentOffset;
-    NSInteger index = offset.x / SCREENWIDE;
-    
-    [self changeButtonSelectWithIndex:index];
-
-
-}
-
-
+/**
+ 
+ */
 - (void)changeButtonSelectWithIndex:(NSInteger)index{
-
     if (index > 3) {
         index -= BUTTONTAG + 1;
     }
-
+    
     if (index == 0) {
         UIButton *provinceButton = [self viewWithTag:BUTTONTAG + 1];
         provinceButton.userInteractionEnabled = NO;
         provinceButton.selected = YES;
-
+        
         UIButton *leeterButton = [self viewWithTag:BUTTONTAG + 2];
         leeterButton.userInteractionEnabled = YES;
         leeterButton.selected = NO;
-
+        
         UIButton *numButton = [self viewWithTag:BUTTONTAG + 3];
         numButton.userInteractionEnabled = YES;
         numButton.selected = NO;
-
+        
         [self.scrollView setContentOffset:CGPointZero animated:YES];
     }else if(index == 1){
         UIButton *provinceButton = [self viewWithTag:BUTTONTAG + 1];
         provinceButton.userInteractionEnabled = YES;
         provinceButton.selected = NO;
-
+        
         UIButton *leeterButton = [self viewWithTag:BUTTONTAG + 2];
         leeterButton.userInteractionEnabled = NO;
         leeterButton.selected = YES;
-
+        
         UIButton *numButton = [self viewWithTag:BUTTONTAG + 3];
         numButton.userInteractionEnabled = YES;
         numButton.selected = NO;
-
+        
         [self.scrollView setContentOffset:CGPointMake(SCREENWIDE, 0) animated:YES];
     }else if (index == 2){
         UIButton *provinceButton = [self viewWithTag:BUTTONTAG + 1];
         provinceButton.userInteractionEnabled = YES;
         provinceButton.selected = NO;
-
+        
         UIButton *leeterButton = [self viewWithTag:BUTTONTAG + 2];
         leeterButton.userInteractionEnabled = YES;
         leeterButton.selected = NO;
-
+        
         UIButton *numButton = [self viewWithTag:BUTTONTAG + 3];
         numButton.userInteractionEnabled = NO;
         numButton.selected = YES;
-
+        
         [self.scrollView setContentOffset:CGPointMake(2 * SCREENWIDE, 0) animated:YES];
     }
 }
 
 
-#pragma mark getter
+#pragma mark- UIscrollViewDelegate
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    CGPoint offset = scrollView.contentOffset;
+    NSInteger index = offset.x / SCREENWIDE;
+    [self changeButtonSelectWithIndex:index];
+}
+
+#pragma mark- getter
 
 - (UIScrollView *)scrollView{
     if (!_scrollView) {
@@ -569,7 +412,6 @@ static __weak id currentFirstResponder;
     }
     return _buttonDictionary;
 }
-
 
 @end
 

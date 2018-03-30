@@ -20,6 +20,7 @@
 		3A5E4D061CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4D021CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png */; };
 		3A5E4D071CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4D031CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png */; };
 		3A5E4D081CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A5E4D041CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png */; };
+		C78550B6206E54ED00BCC02A /* ZZZKeyboardButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C78550B5206E54ED00BCC02A /* ZZZKeyboardButton.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,8 @@
 		3A5E4D021CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_keyboard_backspace_small@2x.png"; sourceTree = "<group>"; };
 		3A5E4D031CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_keyboard_folded_small.png; sourceTree = "<group>"; };
 		3A5E4D041CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_keyboard_folded_small@2x.png"; sourceTree = "<group>"; };
+		C78550B4206E54ED00BCC02A /* ZZZKeyboardButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZZZKeyboardButton.h; sourceTree = "<group>"; };
+		C78550B5206E54ED00BCC02A /* ZZZKeyboardButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZZZKeyboardButton.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,16 +115,11 @@
 		3A5E4CCA1CA8D11000AE4DC6 /* keyboard */ = {
 			isa = PBXGroup;
 			children = (
-				3A5E4D011CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small.png */,
-				3A5E4D021CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png */,
-				3A5E4D031CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png */,
-				3A5E4D041CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png */,
 				3A5E4CCE1CA8D11000AE4DC6 /* AppDelegate.h */,
 				3A5E4CCF1CA8D11000AE4DC6 /* AppDelegate.m */,
 				3A5E4CD11CA8D11000AE4DC6 /* ViewController.h */,
 				3A5E4CD21CA8D11000AE4DC6 /* ViewController.m */,
-				3A5E4CFE1CA8D17F00AE4DC6 /* ZZZKeyboard.h */,
-				3A5E4CFF1CA8D17F00AE4DC6 /* ZZZKeyboard.m */,
+				C78550B3206E507D00BCC02A /* ZZZKeyboard */,
 				3A5E4CD41CA8D11000AE4DC6 /* Main.storyboard */,
 				3A5E4CD71CA8D11000AE4DC6 /* Assets.xcassets */,
 				3A5E4CD91CA8D11000AE4DC6 /* LaunchScreen.storyboard */,
@@ -155,6 +153,21 @@
 				3A5E4CF21CA8D11000AE4DC6 /* Info.plist */,
 			);
 			path = keyboardUITests;
+			sourceTree = "<group>";
+		};
+		C78550B3206E507D00BCC02A /* ZZZKeyboard */ = {
+			isa = PBXGroup;
+			children = (
+				3A5E4CFE1CA8D17F00AE4DC6 /* ZZZKeyboard.h */,
+				3A5E4CFF1CA8D17F00AE4DC6 /* ZZZKeyboard.m */,
+				C78550B4206E54ED00BCC02A /* ZZZKeyboardButton.h */,
+				C78550B5206E54ED00BCC02A /* ZZZKeyboardButton.m */,
+				3A5E4D011CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small.png */,
+				3A5E4D021CA8E1CD00AE4DC6 /* ic_keyboard_backspace_small@2x.png */,
+				3A5E4D031CA8E1CD00AE4DC6 /* ic_keyboard_folded_small.png */,
+				3A5E4D041CA8E1CD00AE4DC6 /* ic_keyboard_folded_small@2x.png */,
+			);
+			name = ZZZKeyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -292,6 +305,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A5E4CD31CA8D11000AE4DC6 /* ViewController.m in Sources */,
+				C78550B6206E54ED00BCC02A /* ZZZKeyboardButton.m in Sources */,
 				3A5E4CD01CA8D11000AE4DC6 /* AppDelegate.m in Sources */,
 				3A5E4CCD1CA8D11000AE4DC6 /* main.m in Sources */,
 				3A5E4D001CA8D17F00AE4DC6 /* ZZZKeyboard.m in Sources */,
